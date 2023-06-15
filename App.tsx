@@ -22,7 +22,7 @@ interface Home {
 }
 
 const App = () => {
-  const [inventory, setInventory] = useState<InventoryItems[] | null>(null);
+  const [inventory, setInventory] = useState<Array<any>>([]);
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
 
@@ -46,7 +46,7 @@ const App = () => {
         quantity: parseInt(itemQuantity),
       };
 
-      setInventory(prevInventory => [...prevInventory, newItem]);
+      setInventory(prevInventory => ([...prevInventory, newItem]));
 
       setItemName('');
       setItemQuantity('');
