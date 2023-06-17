@@ -11,7 +11,7 @@ import {
 import { listInventoryItems } from './src/graphql/queries';
 import * as mutations from './src/graphql/mutations';
 import * as subscriptions from './src/graphql/subscriptions';
-import { type ListInventoryItemsQuery, type InventoryItems } from './src/API';
+import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation } from './src/API';
 import { API } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
 
@@ -78,6 +78,21 @@ const App = () => {
       }
     };
     fetchItems();
+    const createItems = async () => {
+      const response = await API.graphql<GraphQLQuery<CreateInventoryItemsMutation>>(
+         {query: mutations.createInventoryItems} 
+      );
+    }
+    const deleteItem = async () => {
+      const response = await API.graphql<GraphQLQuery<DeleteInventoryItemsMutation>>(
+        {query: mutations.deleteInventoryItems}
+      )
+    }
+    const updateItems = async () => {
+      const response = await API.graphql<GraphQLQuery<UpdateInventoryItemsMutation>>(
+        {query: mutations.updateInventoryItems}
+      )
+    }
   }, []);
 
 
