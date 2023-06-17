@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,18 +7,19 @@ import {
   Button,
   FlatList,
 } from 'react-native';
-  
-import {listInventoryItems} from './src/graphql/queries';
+
+import { listInventoryItems } from './src/graphql/queries';
 import * as mutations from './src/graphql/mutations';
 import * as subscriptions from './src/graphql/subscriptions';
-import {type ListInventoryItemsQuery, type InventoryItems} from './src/API';
-import {API} from 'aws-amplify';
-import {type GraphQLQuery} from '@aws-amplify/api';
+import { type ListInventoryItemsQuery, type InventoryItems } from './src/API';
+import { API } from 'aws-amplify';
+import { type GraphQLQuery } from '@aws-amplify/api';
 
-interface Home {
+interface InventoryItem {
   id: string;
   name: string;
-  quantity: number;
+  totalQuantity: number;
+  enteredQuantity: number;
 }
 
 const App = () => {
@@ -26,10 +27,51 @@ const App = () => {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
 
+  const handleAddItem = () => {
+    if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
+      const newItem: InventoryItem = {
+        id: new Date().getTime().toString(),
+        name: itemName,
+        totalQuantity: parseInt(itemQuantity),
+        enteredQuantity: parseInt(itemQuantity),
+      };
+
+      const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+      if (existingItemIndex !== -1) {
+        const updatedInventory = [...inventory];
+        updatedInventory[existingItemIndex].totalQuantity += newItem.totalQuantity;
+        updatedInventory[existingItemIndex].enteredQuantity += newItem.enteredQuantity;
+        setInventory(updatedInventory);
+      } else {
+        setInventory(prevInventory => [...prevInventory, newItem]);
+      }
+
+      setItemName('');
+      setItemQuantity('');
+    }
+  };
+
+  const handleRemoveItem = () => {
+    const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+    if (existingItemIndex !== -1) {
+      const updatedInventory = [...inventory];
+      updatedInventory[existingItemIndex].totalQuantity -= parseInt(itemQuantity);
+      updatedInventory[existingItemIndex].enteredQuantity -= parseInt(itemQuantity);
+      setInventory(updatedInventory);
+    }
+
+    setItemName('');
+    setItemQuantity('');
+  };
+
+  const handleClearItems = () => {
+    setInventory([]);
+  };
+
   useEffect(() => {
     const fetchItems = async () => {
       const response = await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>(
-        {query: listInventoryItems},
+        { query: listInventoryItems },
       );
       if (response.data?.listInventoryItems) {
         setInventory(response?.data?.listInventoryItems?.items);
@@ -38,28 +80,6 @@ const App = () => {
     fetchItems();
   }, []);
 
-  const handleAddItem = () => {
-    if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
-      const newItem: Home = {
-        id: new Date().getTime().toString(),
-        name: itemName,
-        quantity: parseInt(itemQuantity),
-      };
-
-      setInventory(prevInventory => ([...prevInventory, newItem]));
-
-      setItemName('');
-      setItemQuantity('');
-    }
-  };
-
-  const handleRemoveItem = (id: string) => {
-    setInventory(prevInventory => prevInventory.filter(item => item.id !== id));
-  };
-
-  const handleClearItems = () => {
-    setInventory([]);
-  };
 
   return (
     <View style={styles.container}>
@@ -84,6 +104,9 @@ const App = () => {
           <Button title="Add" onPress={handleAddItem} />
         </View>
         <View style={styles.button}>
+          <Button title="Remove" onPress={handleRemoveItem} />
+        </View>
+        <View style={styles.button}>
           <Button title="Clear" onPress={handleClearItems} />
         </View>
       </View>
@@ -94,15 +117,11 @@ const App = () => {
         <FlatList
           data={inventory}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <View style={styles.itemContainer}>
               <Text style={styles.stock}>
-                {item.name} - Quantity: {item.quantity}
+                {item.name} - Quantity: {item.totalQuantity}
               </Text>
-              <Button
-                title="Remove"
-                onPress={() => handleRemoveItem(item.id)}
-              />
             </View>
           )}
         />
