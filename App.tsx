@@ -11,7 +11,7 @@ import {
 import { listInventoryItems } from './src/graphql/queries';
 import * as mutations from './src/graphql/mutations';
 import * as subscriptions from './src/graphql/subscriptions';
-import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation } from './src/API';
+import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation, CreateInventoryItemsInput } from './src/API';
 import { API } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
 
@@ -27,47 +27,6 @@ const App = () => {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
 
-  const handleAddItem = () => {
-    if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
-      const newItem: InventoryItem = {
-        id: new Date().getTime().toString(),
-        name: itemName,
-        totalQuantity: parseInt(itemQuantity),
-        enteredQuantity: parseInt(itemQuantity),
-      };
-
-      const existingItemIndex = inventory.findIndex(item => item.name === itemName);
-      if (existingItemIndex !== -1) {
-        const updatedInventory = [...inventory];
-        updatedInventory[existingItemIndex].totalQuantity += newItem.totalQuantity;
-        updatedInventory[existingItemIndex].enteredQuantity += newItem.enteredQuantity;
-        setInventory(updatedInventory);
-      } else {
-        setInventory(prevInventory => [...prevInventory, newItem]);
-      }
-
-      setItemName('');
-      setItemQuantity('');
-    }
-  };
-
-  const handleRemoveItem = () => {
-    const existingItemIndex = inventory.findIndex(item => item.name === itemName);
-    if (existingItemIndex !== -1) {
-      const updatedInventory = [...inventory];
-      updatedInventory[existingItemIndex].totalQuantity -= parseInt(itemQuantity);
-      updatedInventory[existingItemIndex].enteredQuantity -= parseInt(itemQuantity);
-      setInventory(updatedInventory);
-    }
-
-    setItemName('');
-    setItemQuantity('');
-  };
-
-  const handleClearItems = () => {
-    setInventory([]);
-  };
-
   useEffect(() => {
     const fetchItems = async () => {
       const response = await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>(
@@ -79,70 +38,120 @@ const App = () => {
     };
     fetchItems();
     const createItems = async () => {
+      const item: CreateInventoryItemsInput = {
+        name: itemName,
+        stock: itemQuantity
+      }
       const response = await API.graphql<GraphQLQuery<CreateInventoryItemsMutation>>(
-         {query: mutations.createInventoryItems} 
+        {
+          query: mutations.createInventoryItems,
+          variables: {input : item}
+        }
       );
-    }
-    const deleteItem = async () => {
-      const response = await API.graphql<GraphQLQuery<DeleteInventoryItemsMutation>>(
-        {query: mutations.deleteInventoryItems}
-      )
-    }
-    const updateItems = async () => {
-      const response = await API.graphql<GraphQLQuery<UpdateInventoryItemsMutation>>(
-        {query: mutations.updateInventoryItems}
-      )
-    }
+}
+const deleteItem = async () => {
+  const response = await API.graphql<GraphQLQuery<DeleteInventoryItemsMutation>>(
+    { query: mutations.deleteInventoryItems }
+  )
+}
+const updateItems = async () => {
+  const response = await API.graphql<GraphQLQuery<UpdateInventoryItemsMutation>>(
+    { query: mutations.updateInventoryItems }
+  )
+}
   }, []);
 
+const handleAddItem = () => {
+  if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
+    const newItem: InventoryItem = {
+      id: new Date().getTime().toString(),
+      name: itemName,
+      totalQuantity: parseInt(itemQuantity),
+      enteredQuantity: parseInt(itemQuantity),
+    };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Inventory App</Text>
-      <TextInput
-        placeholder="Enter the Item Name..."
-        style={styles.input}
-        value={itemName}
-        onChangeText={text => setItemName(text)}
-      />
+    const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+    if (existingItemIndex !== -1) {
+      const updatedInventory = [...inventory];
+      updatedInventory[existingItemIndex].totalQuantity += newItem.totalQuantity;
+      updatedInventory[existingItemIndex].enteredQuantity += newItem.enteredQuantity;
+      setInventory(updatedInventory);
+    } else {
+      setInventory(prevInventory => [...prevInventory, newItem]);
+    }
 
-      <TextInput
-        placeholder="Enter the Quantity of Item..."
-        keyboardType="numeric"
-        style={styles.input}
-        value={itemQuantity}
-        onChangeText={text => setItemQuantity(text)}
-      />
+    setItemName('');
+    setItemQuantity('');
 
-      <View style={styles.buttonContainer}>
-        <View style={styles.button}>
-          <Button title="Add" onPress={handleAddItem} />
-        </View>
-        <View style={styles.button}>
-          <Button title="Remove" onPress={handleRemoveItem} />
-        </View>
-        <View style={styles.button}>
-          <Button title="Clear" onPress={handleClearItems} />
-        </View>
+  }
+};
+
+const handleRemoveItem = () => {
+  const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+  if (existingItemIndex !== -1) {
+    const updatedInventory = [...inventory];
+    updatedInventory[existingItemIndex].totalQuantity -= parseInt(itemQuantity);
+    updatedInventory[existingItemIndex].enteredQuantity -= parseInt(itemQuantity);
+    setInventory(updatedInventory);
+  }
+
+  setItemName('');
+  setItemQuantity('');
+};
+
+const handleClearItems = () => {
+  setInventory([]);
+};
+
+
+
+return (
+  <View style={styles.container}>
+    <Text style={styles.heading}>Inventory App</Text>
+    <TextInput
+      placeholder="Enter the Item Name..."
+      style={styles.input}
+      value={itemName}
+      onChangeText={text => setItemName(text)}
+    />
+
+    <TextInput
+      placeholder="Enter the Quantity of Item..."
+      keyboardType="numeric"
+      style={styles.input}
+      value={itemQuantity}
+      onChangeText={text => setItemQuantity(text)}
+    />
+
+    <View style={styles.buttonContainer}>
+      <View style={styles.button}>
+        <Button title="Add" onPress={handleAddItem} />
       </View>
-
-      <Text style={styles.heading}>Stock Left:</Text>
-
-      <View style={styles.listContainer}>
-        <FlatList
-          data={inventory}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.itemContainer}>
-              <Text style={styles.stock}>
-                {item.name} - Quantity: {item.totalQuantity}
-              </Text>
-            </View>
-          )}
-        />
+      <View style={styles.button}>
+        <Button title="Remove" onPress={handleRemoveItem} />
+      </View>
+      <View style={styles.button}>
+        <Button title="Clear" onPress={handleClearItems} />
       </View>
     </View>
-  );
+
+    <Text style={styles.heading}>Stock Left:</Text>
+
+    <View style={styles.listContainer}>
+      <FlatList
+        data={inventory}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.itemContainer}>
+            <Text style={styles.stock}>
+              {item.name} - Quantity: {item.totalQuantity}
+            </Text>
+          </View>
+        )}
+      />
+    </View>
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
@@ -186,3 +195,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
