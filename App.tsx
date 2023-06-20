@@ -37,7 +37,6 @@ const App = () => {
       }
     };
     fetchItems();
-
   }, []);
   const item: CreateInventoryItemsInput = {
     name: itemName,
@@ -69,14 +68,17 @@ const App = () => {
     )
   }
 
+  const newItem: InventoryItem = {
+    id: new Date().getTime().toString(),
+    name: itemName,
+    totalQuantity: parseInt(itemQuantity),
+    enteredQuantity: parseInt(itemQuantity),
+  };
   const handleAddItem = () => {
     if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
-      const newItem: InventoryItem = {
-        id: new Date().getTime().toString(),
-        name: itemName,
-        totalQuantity: parseInt(itemQuantity),
-        enteredQuantity: parseInt(itemQuantity),
-      };
+
+
+      createItems()
 
       const existingItemIndex = inventory.findIndex(item => item.name === itemName);
       if (existingItemIndex !== -1) {
@@ -108,10 +110,17 @@ const App = () => {
   };
 
   const handleClearItems = () => {
+    deleteItem()
     setInventory([]);
   };
 
 
+  console.log(item)
+  console.log(item.name)
+  console.log(item.stock)
+  console.log(newItem.name)
+  console.log(newItem.enteredQuantity)
+  console.log(newItem.totalQuantity)
 
   return (
     <View style={styles.container}>
