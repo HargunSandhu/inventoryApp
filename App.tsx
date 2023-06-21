@@ -12,7 +12,7 @@ import { listInventoryItems } from './src/graphql/queries';
 import * as mutations from './src/graphql/mutations';
 import * as subscriptions from './src/graphql/subscriptions';
 import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation, CreateInventoryItemsInput } from './src/API';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
 
 interface InventoryItem {
@@ -26,6 +26,10 @@ const App = () => {
   const [inventory, setInventory] = useState<Array<any>>([]);
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
+
+  const signUp = async () => {
+    
+  }
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -121,7 +125,7 @@ const App = () => {
   console.log(newItem.name)
   console.log(newItem.enteredQuantity)
   console.log(newItem.totalQuantity)
-
+  console.log(inventory)
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Inventory App</Text>
@@ -212,4 +216,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
