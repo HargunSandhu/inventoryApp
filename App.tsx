@@ -12,7 +12,7 @@ import { listInventoryItems } from './src/graphql/queries';
 import * as mutations from './src/graphql/mutations';
 import * as subscriptions from './src/graphql/subscriptions';
 import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation, CreateInventoryItemsInput } from './src/API';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
 
 interface InventoryItem {
@@ -27,6 +27,10 @@ const App = () => {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
 
+  const signUp = async () => {
+    
+  }
+
   useEffect(() => {
     const fetchItems = async () => {
       const response = await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>(
@@ -37,7 +41,6 @@ const App = () => {
       }
     };
     fetchItems();
-
   }, []);
   const item: CreateInventoryItemsInput = {
     name: itemName,
@@ -69,14 +72,17 @@ const App = () => {
     )
   }
 
+  const newItem: InventoryItem = {
+    id: new Date().getTime().toString(),
+    name: itemName,
+    totalQuantity: parseInt(itemQuantity),
+    enteredQuantity: parseInt(itemQuantity),
+  };
   const handleAddItem = () => {
     if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
-      const newItem: InventoryItem = {
-        id: new Date().getTime().toString(),
-        name: itemName,
-        totalQuantity: parseInt(itemQuantity),
-        enteredQuantity: parseInt(itemQuantity),
-      };
+
+
+      createItems()
 
       const existingItemIndex = inventory.findIndex(item => item.name === itemName);
       if (existingItemIndex !== -1) {
@@ -108,11 +114,18 @@ const App = () => {
   };
 
   const handleClearItems = () => {
+    deleteItem()
     setInventory([]);
   };
 
 
-
+  console.log(item)
+  console.log(item.name)
+  console.log(item.stock)
+  console.log(newItem.name)
+  console.log(newItem.enteredQuantity)
+  console.log(newItem.totalQuantity)
+  console.log(inventory)
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Inventory App</Text>
@@ -203,4 +216,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
