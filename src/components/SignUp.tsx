@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { TextInput, View, Button, StyleSheet } from 'react-native'
+import { TextInput, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import { Auth } from 'aws-amplify'
+import { Text } from "react-native";
+// import { useNavigation } from '@react-navigation/native';
 
 interface SignUpProps {
     setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,6 +11,7 @@ interface SignUpProps {
 const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // const navigation = useNavigation();
 
     const signUp = async () => {
         try {
@@ -44,8 +47,10 @@ const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
                     onPress={signUp}
                 />
             </View>
-            <View>
-                
+            <View style={styles.signIn}>
+                <Text
+                    // onPress={() => navigation.navigate}
+                >Sign in?</Text>
             </View>
         </View>
     );
@@ -64,6 +69,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginTop: 10,
+    },
+    signIn: {
+        marginLeft: 10,
+        marginTop: 10,
+        fontWeight: "bold",
+        color: 'black',
     }
 })
 
