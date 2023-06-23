@@ -19,6 +19,7 @@
     "react-native": "0.71.8",
     "react-native-autocomplete-input": "^5.3.2",
     "react-native-elements": "^3.4.3",
+    "react-native-navigation": "^7.33.3-hotfix.3",
     "react-native-responsive-table": "^1.0.4"
   },
   "devDependencies": {

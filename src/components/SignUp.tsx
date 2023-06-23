@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, View, Button } from 'react-native'
+import { TextInput, View, Button, StyleSheet } from 'react-native'
 import {Auth} from 'aws-amplify'
 
 interface SignUpProps {
@@ -40,5 +40,9 @@ const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    
+})
 
 export default SignUp;
