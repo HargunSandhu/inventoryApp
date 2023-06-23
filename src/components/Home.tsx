@@ -15,45 +15,8 @@ import * as subscriptions from '../graphql/subscriptions';
 import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation, CreateInventoryItemsInput } from '../API';
 import { API, Auth } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
+import SignUp from './SignUp';
 
-interface LoginProps {
-    setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Login: React.FC<LoginProps> = ({ setSignedUp }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const signUp = async () => {
-        try {
-            const { user } = await Auth.signUp({
-                username: email,
-                password,
-            });
-            console.log('Sign up successful', user);
-            setSignedUp(true);
-        } catch (error) {
-            console.log('Error signing up', error);
-        }
-    };
-
-    return (
-        <View>
-            <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <Button title="Sign Up" onPress={signUp} />
-        </View>
-    );
-};
 
 interface InventoryItem {
     id: string;
@@ -61,6 +24,7 @@ interface InventoryItem {
     totalQuantity: number;
     enteredQuantity: number;
 }
+
 
 const Home = () => {
     const [inventory, setInventory] = useState<Array<any>>([]);
@@ -203,7 +167,7 @@ const Home = () => {
             </View>
         </View>
     ) : (
-        <Login setSignedUp={setSignedUp} />
+        <SignUp setSignedUp={setSignedUp} />
     );
 };
 
