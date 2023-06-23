@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, View, Button, StyleSheet } from 'react-native'
-import {Auth} from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 
 interface SignUpProps {
     setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,20 +29,42 @@ const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                style={styles.input}
             />
             <TextInput
                 placeholder="Password"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
+                style={styles.input}
             />
-            <Button title="Sign Up" onPress={signUp} />
+            <View style={styles.btn}>
+                <Button
+                    title="Sign Up"
+                    onPress={signUp}
+                />
+            </View>
+            <View>
+                
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    
+    input: {
+        borderColor: 'black',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+    },
+    btn: {
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+    }
 })
 
 export default SignUp;

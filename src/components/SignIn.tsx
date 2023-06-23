@@ -27,10 +27,12 @@ const SignIn = () => {
                 value={password}
                 onChangeText={text => setPassword(text)}
             />
+            <View >
             <Button
                 title="Sign In"
                 onPress={signIn}
-            />
+                />
+            </View>
         </View>
     )
 }
