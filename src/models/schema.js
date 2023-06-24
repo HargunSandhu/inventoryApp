@@ -17,10 +17,17 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "stock": {
-                    "name": "stock",
+                "totalQuantity": {
+                    "name": "totalQuantity",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "enteredQuantity": {
+                    "name": "enteredQuantity",
+                    "isArray": false,
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -75,6 +82,6 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "codegenVersion": "3.4.3",
-    "version": "5a9768b16d896f39989434c21fa5ce11"
+    "codegenVersion": "3.4.4",
+    "version": "ce258a40586f615caeb81551fabc2581"
 };
