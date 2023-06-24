@@ -13,7 +13,8 @@ type EagerInventoryItems = {
   };
   readonly id: string;
   readonly name?: string | null;
-  readonly stock?: string | null;
+  readonly totalQuantity?: number | null;
+  readonly enteredQuantity?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -25,7 +26,8 @@ type LazyInventoryItems = {
   };
   readonly id: string;
   readonly name?: string | null;
-  readonly stock?: string | null;
+  readonly totalQuantity?: number | null;
+  readonly enteredQuantity?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import { TextInput, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import { TextInput, View, Button, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native'
 import { Auth } from 'aws-amplify'
-import { Text } from "react-native";
-// import { useNavigation } from '@react-navigation/native';
+
 
 interface SignUpProps {
     setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type SignUpParams = {
+    email: string 
+    password: string
+}
+
 const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    // const navigation = useNavigation();
+   const [signUpParams, setSignUpParams] = useState({ email: '', password: '' }) 
 
     const signUp = async () => {
         try {
             const { user } = await Auth.signUp({
-                username: email,
-                password,
+                username: signUpParams.email,
+                password: signUpParams.password,
             });
             console.log('Sign up successful', user);
             setSignedUp(true);
@@ -27,18 +29,18 @@ const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
     };
 
     return (
-        <View>
+        <SafeAreaView>
             <TextInput
                 placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
+                value={signUpParams.email}
+                onChangeText={text => setSignUpParams(prev => ({ ...prev, email: text }))}
                 style={styles.input}
             />
             <TextInput
                 placeholder="Password"
                 secureTextEntry
-                value={password}
-                onChangeText={setPassword}
+                value={signUpParams.password}
+                onChangeText={text => setSignUpParams(prev => ({ ...prev, password: text }))}
                 style={styles.input}
             />
             <View style={styles.btn}>
@@ -48,15 +50,24 @@ const SignUp: React.FC<SignUpProps> = ({ setSignedUp }) => {
                 />
             </View>
             <View style={styles.signIn}>
-                <Text
-                    // onPress={() => navigation.navigate}
-                >Sign in?</Text>
+                <Text style={styles.txt}>
+                    Already have an account? 
+                </Text>
+                <Button
+                title="Sign In"
+                onPress={() => navigation.navigate('Home')}
+                ></Button>
             </View>
-        </View>
+            </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     input: {
         borderColor: 'black',
         borderStyle: 'solid',
@@ -71,10 +82,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     signIn: {
-        marginLeft: 10,
+        marginLeft: 250,
         marginTop: 10,
         fontWeight: "bold",
         color: 'black',
+        marginRight: 10,
+    }, txt: {
+        
     }
 })
 

@@ -1,6 +1,7 @@
 type InventoryItems @model @auth(rules: [{allow: public, operations: [read]}, {allow: private}]) {
   id: ID!
   name: String
-  stock: String
+  totalQuantity: Int
+  enteredQuantity: Int
 }
  
