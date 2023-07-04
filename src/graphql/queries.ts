@@ -7,12 +7,14 @@ export const getInventoryItems = /* GraphQL */ `
     getInventoryItems(id: $id) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -26,15 +28,18 @@ export const listInventoryItems = /* GraphQL */ `
       items {
         id
         name
-        stock
+        totalQuantity
+        enteredQuantity
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -54,15 +59,18 @@ export const syncInventoryItems = /* GraphQL */ `
       items {
         id
         name
-        stock
+        totalQuantity
+        enteredQuantity
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;

@@ -7,7 +7,7 @@ import {
     Button,
     FlatList,
 } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
 
 import { listInventoryItems } from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
@@ -16,7 +16,8 @@ import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItems
 import { API, Auth } from 'aws-amplify';
 import { type GraphQLQuery } from '@aws-amplify/api';
 import SignUp from './SignUp';
-
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeParamList } from '../navigation/home-stack';
 
 interface InventoryItem {
     id: string;
@@ -25,12 +26,16 @@ interface InventoryItem {
     enteredQuantity: number;
 }
 
+interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> {
 
-const Home = () => {
+}
+
+const Home = (props: Props) => {
+    const { navigation } = props
     const [inventory, setInventory] = useState<Array<any>>([]);
     const [itemName, setItemName] = useState('');
     const [itemQuantity, setItemQuantity] = useState('');
-    const [signedUp, setSignedUp] = useState(false)
+    const [signedIn, setSignedIn] = useState(false)
 
 
     useEffect(() => {
@@ -46,7 +51,7 @@ const Home = () => {
     }, []);
     const item: CreateInventoryItemsInput = {
         name: itemName,
-        stock: itemQuantity
+        totalQuantity: parseInt(itemQuantity),
     }
     const createItems = async () => {
 
@@ -120,7 +125,7 @@ const Home = () => {
         setInventory([]);
     };
 
-    return signedUp ?(
+    return (
         <View style={styles.container}>
             <Text style={styles.heading}>Inventory App</Text>
             <TextInput
@@ -166,10 +171,9 @@ const Home = () => {
                 />
             </View>
         </View>
-    ) : (
-        <SignUp setSignedUp={setSignedUp} />
-    );
+    )
 };
+
 
 const styles = StyleSheet.create({
     container: {

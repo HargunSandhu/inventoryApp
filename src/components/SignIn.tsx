@@ -1,13 +1,18 @@
 import React, {useReducer, type Reducer} from 'react';
 import {Auth} from 'aws-amplify';
 import {View, TextInput, Button} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeParamList} from '../navigation/home-stack';
 
 type LoginParams = {
   email: string;
   password: string;
 };
 
-const SignIn = () => {
+interface SignInProps extends NativeStackScreenProps<HomeParamList, 'SignIn'> {}
+
+const SignIn = (props: SignInProps) => {
+  const {navigation} = props || {};
   const [loginParams, setLoginParams] = useReducer<
     Reducer<LoginParams, Partial<LoginParams>>
   >(

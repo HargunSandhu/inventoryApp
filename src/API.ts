@@ -5,16 +5,19 @@
 export type CreateInventoryItemsInput = {
   id?: string | null,
   name?: string | null,
-  stock?: string | null,
+  totalQuantity?: number | null,
+  enteredQuantity?: number | null,
   _version?: number | null,
 };
 
 export type ModelInventoryItemsConditionInput = {
   name?: ModelStringInput | null,
-  stock?: ModelStringInput | null,
+  totalQuantity?: ModelIntInput | null,
+  enteredQuantity?: ModelIntInput | null,
   and?: Array< ModelInventoryItemsConditionInput | null > | null,
   or?: Array< ModelInventoryItemsConditionInput | null > | null,
   not?: ModelInventoryItemsConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelStringInput = {
@@ -57,11 +60,31 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type InventoryItems = {
   __typename: "InventoryItems",
   id: string,
   name?: string | null,
-  stock?: string | null,
+  totalQuantity?: number | null,
+  enteredQuantity?: number | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -72,7 +95,8 @@ export type InventoryItems = {
 export type UpdateInventoryItemsInput = {
   id: string,
   name?: string | null,
-  stock?: string | null,
+  totalQuantity?: number | null,
+  enteredQuantity?: number | null,
   _version?: number | null,
 };
 
@@ -84,10 +108,12 @@ export type DeleteInventoryItemsInput = {
 export type ModelInventoryItemsFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
-  stock?: ModelStringInput | null,
+  totalQuantity?: ModelIntInput | null,
+  enteredQuantity?: ModelIntInput | null,
   and?: Array< ModelInventoryItemsFilterInput | null > | null,
   or?: Array< ModelInventoryItemsFilterInput | null > | null,
   not?: ModelInventoryItemsFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelIDInput = {
@@ -116,9 +142,11 @@ export type ModelInventoryItemsConnection = {
 export type ModelSubscriptionInventoryItemsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
-  stock?: ModelSubscriptionStringInput | null,
+  totalQuantity?: ModelSubscriptionIntInput | null,
+  enteredQuantity?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionInventoryItemsFilterInput | null > | null,
   or?: Array< ModelSubscriptionInventoryItemsFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -151,6 +179,18 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
 export type CreateInventoryItemsMutationVariables = {
   input: CreateInventoryItemsInput,
   condition?: ModelInventoryItemsConditionInput | null,
@@ -161,7 +201,8 @@ export type CreateInventoryItemsMutation = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -180,7 +221,8 @@ export type UpdateInventoryItemsMutation = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -199,7 +241,8 @@ export type DeleteInventoryItemsMutation = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -217,7 +260,8 @@ export type GetInventoryItemsQuery = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -239,7 +283,8 @@ export type ListInventoryItemsQuery = {
       __typename: "InventoryItems",
       id: string,
       name?: string | null,
-      stock?: string | null,
+      totalQuantity?: number | null,
+      enteredQuantity?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -265,7 +310,8 @@ export type SyncInventoryItemsQuery = {
       __typename: "InventoryItems",
       id: string,
       name?: string | null,
-      stock?: string | null,
+      totalQuantity?: number | null,
+      enteredQuantity?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -286,7 +332,8 @@ export type OnCreateInventoryItemsSubscription = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -304,7 +351,8 @@ export type OnUpdateInventoryItemsSubscription = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -322,7 +370,8 @@ export type OnDeleteInventoryItemsSubscription = {
     __typename: "InventoryItems",
     id: string,
     name?: string | null,
-    stock?: string | null,
+    totalQuantity?: number | null,
+    enteredQuantity?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

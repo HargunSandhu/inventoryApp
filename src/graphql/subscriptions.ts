@@ -9,12 +9,14 @@ export const onCreateInventoryItems = /* GraphQL */ `
     onCreateInventoryItems(filter: $filter) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -25,12 +27,14 @@ export const onUpdateInventoryItems = /* GraphQL */ `
     onUpdateInventoryItems(filter: $filter) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -41,12 +45,14 @@ export const onDeleteInventoryItems = /* GraphQL */ `
     onDeleteInventoryItems(filter: $filter) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;

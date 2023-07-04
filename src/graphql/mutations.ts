@@ -10,12 +10,14 @@ export const createInventoryItems = /* GraphQL */ `
     createInventoryItems(input: $input, condition: $condition) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -27,12 +29,14 @@ export const updateInventoryItems = /* GraphQL */ `
     updateInventoryItems(input: $input, condition: $condition) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -44,12 +48,14 @@ export const deleteInventoryItems = /* GraphQL */ `
     deleteInventoryItems(input: $input, condition: $condition) {
       id
       name
-      stock
+      totalQuantity
+      enteredQuantity
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
