@@ -26,9 +26,8 @@ interface InventoryItem {
     enteredQuantity: number;
 }
 
-interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> {
 
-}
+interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> {}
 
 const Home = (props: Props) => {
     const { navigation } = props
