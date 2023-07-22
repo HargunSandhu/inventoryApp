@@ -10,11 +10,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aws-amplify/api": "^5.3.5",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/netinfo": "^9.3.10",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
+    "amazon-cognito-identity-js": "^6.3.1",
     "amplify": "^0.0.11",
+    "aws-amplify": "^5.3.5",
     "aws-amplify-react-native": "^7.0.2",
     "graphql-tag": "^2.12.6",
     "react": "18.2.0",

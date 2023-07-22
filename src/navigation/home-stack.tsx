@@ -8,8 +8,10 @@ import EmailConfirm from '../components/EmailConfirm';
 export type HomeParamList = {
   Home: undefined;
   SignIn: undefined;
-  SignUp: undefined;
-  EmailConfirm: undefined;
+  SignUp: {
+    setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
+};
+  EmailConfirm: { email: string };
 };
 
 const Stack = createNativeStackNavigator<HomeParamList>();
@@ -18,7 +20,7 @@ const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="Home">
+      initialRouteName="SignUp">
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />

@@ -26,6 +26,7 @@ const SignIn = (props: SignInProps) => {
     try {
       const user = await Auth.signIn(loginParams.email, loginParams.password);
       console.log('sign in successful');
+      user && navigation.navigate('Home')
     } catch (error) {
       console.log(error);
     }

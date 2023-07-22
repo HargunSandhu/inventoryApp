@@ -7,7 +7,7 @@ import EmailConfirm from './src/components/EmailConfirm';
 const App = () => {
   return (
     <NavigationContainer>
-      <SignUp />
+      <HomeStack />
     </NavigationContainer>
   );
 };

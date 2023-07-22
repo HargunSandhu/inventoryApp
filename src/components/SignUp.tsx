@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   TextInput,
   View,
@@ -8,31 +8,36 @@ import {
   Text,
   SafeAreaView,
 } from 'react-native';
-import { Auth } from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeParamList } from '../navigation/home-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeParamList} from '../navigation/home-stack';
 
-type SignUpProps = NativeStackScreenProps<HomeParamList, 'SignUp'> & {
-  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
-}
+type SignUpProps = NativeStackScreenProps<HomeParamList, 'SignUp'> & {};
+
+// navigation.navigate('SignUp', { setSignedUp: setSignedUp })
 
 type SignUpParams = {
   email: string;
   password: string;
 };
 
-const SignUp = () => {
-  const [signUpParams, setSignUpParams] = useState<SignUpParams>({ email: '', password: '' });
+const SignUp = ({route, navigation}: SignUpProps) => {
+  const setSignedUp = route.params?.setSignedUp;
+  const [signUpParams, setSignUpParams] = useState<SignUpParams>({
+    email: '',
+    password: '',
+  });
 
   const signUp = async () => {
     try {
-      const { user } = await Auth.signUp({
+      const {user} = await Auth.signUp({
         username: signUpParams.email,
         password: signUpParams.password,
       });
       console.log('Sign up successful', user);
-      // setSignedUp(true);
+      user && navigation.navigate('EmailConfirm', {email: signUpParams.email});
+      setSignedUp && setSignedUp(true);
     } catch (error) {
       console.log('Error signing up', error);
     }
@@ -43,7 +48,7 @@ const SignUp = () => {
       <TextInput
         placeholder="Email"
         value={signUpParams.email}
-        onChangeText={text => setSignUpParams(prev => ({ ...prev, email: text }))}
+        onChangeText={text => setSignUpParams(prev => ({...prev, email: text}))}
         style={styles.input}
       />
       <TextInput
@@ -51,7 +56,7 @@ const SignUp = () => {
         secureTextEntry
         value={signUpParams.password}
         onChangeText={text =>
-          setSignUpParams(prev => ({ ...prev, password: text }))
+          setSignUpParams(prev => ({...prev, password: text}))
         }
         style={styles.input}
       />
@@ -60,9 +65,9 @@ const SignUp = () => {
       </View>
       <View style={styles.signIn}>
         <Text style={styles.txt}>Already have an account?</Text>
-        {/* <Button
+        <Button
           title="Sign In"
-          onPress={() => navigation.navigate('Home')}></Button> */}
+          onPress={() => navigation.navigate('SignIn')}></Button>
       </View>
     </SafeAreaView>
   );
