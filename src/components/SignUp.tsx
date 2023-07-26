@@ -64,7 +64,6 @@ const SignUp = ({route, navigation}: SignUpProps) => {
         <Button title="Sign Up" onPress={signUp} />
       </View>
       <View style={styles.signIn}>
-        <Text style={styles.txt}>Already have an account?</Text>
         <Button
           title="Sign In"
           onPress={() => navigation.navigate('SignIn')}></Button>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    borderColor: 'black',
+    borderColor: '#000',
     borderStyle: 'solid',
     borderWidth: 1,
     marginLeft: 10,
@@ -93,10 +92,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   signIn: {
-    marginLeft: 250,
+    marginLeft: 10,
     marginTop: 10,
     fontWeight: 'bold',
-    color: 'black',
+    color: '#000',
     marginRight: 10,
   },
   txt: {},

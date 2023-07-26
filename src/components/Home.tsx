@@ -18,7 +18,7 @@ import { type GraphQLQuery } from '@aws-amplify/api';
 import SignUp from './SignUp';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeParamList } from '../navigation/home-stack';
-
+ 
 interface InventoryItem {
     id: string;
     name: string;
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     input: {
-        borderColor: 'black',
+        borderColor: '#000',
         borderWidth: 1,
         marginBottom: 10,
         padding: 5,

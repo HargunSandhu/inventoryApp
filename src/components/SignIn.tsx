@@ -1,6 +1,6 @@
 import React, {useReducer, type Reducer} from 'react';
 import {Auth} from 'aws-amplify';
-import {View, TextInput, Button} from 'react-native';
+import {View, TextInput, Button, StyleSheet} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeParamList} from '../navigation/home-stack';
 
@@ -37,18 +37,45 @@ const SignIn = (props: SignInProps) => {
       <TextInput
         placeholder="Email"
         value={loginParams.email}
-        onChangeText={text => setLoginParams({email: text})}
+        onChangeText={text => setLoginParams({ email: text })}
+        style={styles.input}
       />
       <TextInput
         placeholder="Password"
         value={loginParams.password}
-        onChangeText={text => setLoginParams({password: text})}
+        onChangeText={text => setLoginParams({ password: text })}
+        style={styles.input}
       />
-      <View>
-        <Button title="Sign In" onPress={signIn} />
+      <View style={styles.btn}>
+        <Button title="Sign In" onPress={signIn}  />
+      </View>
+      <View style={styles.btn}>
+        <Button title='SignUp' onPress={() => navigation.navigate("SignUp")} />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    borderColor: '#000',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+  },
+  btn: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+  },
+
+})
 
 export default SignIn;

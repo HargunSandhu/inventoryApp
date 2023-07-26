@@ -31,12 +31,16 @@ const EmailConfirm = (props: Props) => {
         }
     };
 
+    const handleCodeChange = (code: string) => {
+        setConfirmParams({ ...confirmParams, code });
+    };
+
     return (
         <SafeAreaView>
             <TextInput
                 placeholder="Enter the Code..."
                 style={styles.input}
-                onChangeText={() => { }}
+                onChangeText={handleCodeChange}
             />
             <View style={styles.btn}>
                 <Button title="Confirm Email" onPress={confirmEmail} />
@@ -47,7 +51,7 @@ const EmailConfirm = (props: Props) => {
 
 const styles = StyleSheet.create({
     input: {
-        borderColor: 'black',
+        borderColor: '#000',
         borderStyle: 'solid',
         borderWidth: 1,
         marginLeft: 10,
