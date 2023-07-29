@@ -6,8 +6,12 @@ import {
     View,
     Button,
     FlatList,
+    TouchableOpacity
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import AutocompleteInput from 'react-native-autocomplete-input';
+import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+
 
 import { listInventoryItems } from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
@@ -36,6 +40,9 @@ const Home = (props: Props) => {
     const [itemQuantity, setItemQuantity] = useState('');
     const [signedIn, setSignedIn] = useState(false)
 
+    const [selectedItem, setSelectedItem] = useState(null);
+
+
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -53,7 +60,6 @@ const Home = (props: Props) => {
         totalQuantity: parseInt(itemQuantity),
     }
     const createItems = async () => {
-
         const response = await API.graphql<GraphQLQuery<CreateInventoryItemsMutation>>(
             {
                 query: mutations.createInventoryItems,
@@ -123,14 +129,26 @@ const Home = (props: Props) => {
         deleteItem()
         setInventory([]);
     };
-
+    console.log(inventory.map(item => item.name))
+    const data = inventory.map((item) => ({ id: item.name, title: item.name }))
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Inventory App</Text>
-            <TextInput
+            {/* <TextInput
                 placeholder="Enter the Item Name..."
                 style={styles.input}
                 value={itemName}
+                onChangeText={text => setItemName(text)}
+            /> */}
+            <AutocompleteDropdown
+                dataSet={data}
+                // style={styles.input}
+                // value={itemName}
+                textInputProps={
+                    {
+                        placeholder: 'Enter the Item Name'
+                    }
+                }
                 onChangeText={text => setItemName(text)}
             />
 

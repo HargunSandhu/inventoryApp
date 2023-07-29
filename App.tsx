@@ -7,6 +7,8 @@ import EmailConfirm from './src/components/EmailConfirm';
 const App = () => {
   return (
     <NavigationContainer>
+      {/* Add Dropdown */}
+      {/* Add Logs */}
       <HomeStack />
     </NavigationContainer>
   );

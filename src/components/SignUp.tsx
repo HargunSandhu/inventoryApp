@@ -39,7 +39,7 @@ const SignUp = ({route, navigation}: SignUpProps) => {
       user && navigation.navigate('EmailConfirm', {email: signUpParams.email});
       setSignedUp && setSignedUp(true);
     } catch (error) {
-      console.log('Error signing up', error);
+      console.log('  signing up', error);
     }
   };
 
