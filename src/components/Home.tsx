@@ -6,23 +6,31 @@ import {
     View,
     Button,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+
 import AutocompleteInput from 'react-native-autocomplete-input';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+// import { InputAutoSuggest } from 'react-native-autocomplete-search';
 
-
-import { listInventoryItems } from '../graphql/queries';
+import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
 import * as subscriptions from '../graphql/subscriptions';
-import { type ListInventoryItemsQuery, type InventoryItems, CreateInventoryItemsMutation, DeleteInventoryItemsMutation, UpdateInventoryItemsMutation, CreateInventoryItemsInput } from '../API';
+import {
+    type ListInventoryItemsQuery,
+    type InventoryItems,
+    CreateInventoryItemsMutation,
+    DeleteInventoryItemsMutation,
+    UpdateInventoryItemsMutation,
+    CreateInventoryItemsInput,
+} from '../API';
 import { API, Auth } from 'aws-amplify';
-import { type GraphQLQuery } from '@aws-amplify/api';
+import { graphqlOperation, type GraphQLQuery } from '@aws-amplify/api';
 import SignUp from './SignUp';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeParamList } from '../navigation/home-stack';
- 
+
 interface InventoryItem {
     id: string;
     name: string;
@@ -30,24 +38,21 @@ interface InventoryItem {
     enteredQuantity: number;
 }
 
-
-interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> {}
+interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> { }
 
 const Home = (props: Props) => {
-    const { navigation } = props
+    const { navigation } = props;
     const [inventory, setInventory] = useState<Array<any>>([]);
     const [itemName, setItemName] = useState('');
     const [itemQuantity, setItemQuantity] = useState('');
-    const [signedIn, setSignedIn] = useState(false)
+    const [signedIn, setSignedIn] = useState(false);
 
-    const [selectedItem, setSelectedItem] = useState(null);
-
-
+    const [selectedItem, setSelectedItem] = useState('');
 
     useEffect(() => {
         const fetchItems = async () => {
             const response = await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>(
-                { query: listInventoryItems },
+                { query: queries.listInventoryItems },
             );
             if (response.data?.listInventoryItems) {
                 setInventory(response?.data?.listInventoryItems?.items);
@@ -58,31 +63,31 @@ const Home = (props: Props) => {
     const item: CreateInventoryItemsInput = {
         name: itemName,
         totalQuantity: parseInt(itemQuantity),
-    }
+    };
     const createItems = async () => {
-        const response = await API.graphql<GraphQLQuery<CreateInventoryItemsMutation>>(
-            {
-                query: mutations.createInventoryItems,
-                variables: { input: item }
-            }
-        );
-    }
+        const response = await API.graphql<
+            GraphQLQuery<CreateInventoryItemsMutation>
+        >({
+            query: mutations.createInventoryItems,
+            variables: { input: item },
+        });
+    };
     const deleteItem = async () => {
-        const response = await API.graphql<GraphQLQuery<DeleteInventoryItemsMutation>>(
-            {
-                query: mutations.createInventoryItems,
-                variables: { input: item }
-            }
-        )
-    }
+        const response = await API.graphql<
+            GraphQLQuery<DeleteInventoryItemsMutation>
+        >({
+            query: mutations.createInventoryItems,
+            variables: { input: item },
+        });
+    };
     const updateItems = async () => {
-        const response = await API.graphql<GraphQLQuery<UpdateInventoryItemsMutation>>(
-            {
-                query: mutations.createInventoryItems,
-                variables: { input: item }
-            }
-        )
-    }
+        const response = await API.graphql<
+            GraphQLQuery<UpdateInventoryItemsMutation>
+        >({
+            query: mutations.createInventoryItems,
+            variables: { input: item },
+        });
+    };
 
     const newItem: InventoryItem = {
         id: new Date().getTime().toString(),
@@ -92,15 +97,17 @@ const Home = (props: Props) => {
     };
     const handleAddItem = () => {
         if (itemName.trim() !== '' && itemQuantity.trim() !== '') {
+            createItems();
 
-
-            createItems()
-
-            const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+            const existingItemIndex = inventory.findIndex(
+                item => item.name === itemName,
+            );
             if (existingItemIndex !== -1) {
                 const updatedInventory = [...inventory];
-                updatedInventory[existingItemIndex].totalQuantity += newItem.totalQuantity;
-                updatedInventory[existingItemIndex].enteredQuantity += newItem.enteredQuantity;
+                updatedInventory[existingItemIndex].totalQuantity +=
+                    newItem.totalQuantity;
+                updatedInventory[existingItemIndex].enteredQuantity +=
+                    newItem.enteredQuantity;
                 setInventory(updatedInventory);
             } else {
                 setInventory(prevInventory => [...prevInventory, newItem]);
@@ -108,16 +115,19 @@ const Home = (props: Props) => {
 
             setItemName('');
             setItemQuantity('');
-
         }
     };
 
     const handleRemoveItem = () => {
-        const existingItemIndex = inventory.findIndex(item => item.name === itemName);
+        const existingItemIndex = inventory.findIndex(
+            item => item.name === itemName,
+        );
         if (existingItemIndex !== -1) {
             const updatedInventory = [...inventory];
-            updatedInventory[existingItemIndex].totalQuantity -= parseInt(itemQuantity);
-            updatedInventory[existingItemIndex].enteredQuantity -= parseInt(itemQuantity);
+            updatedInventory[existingItemIndex].totalQuantity -=
+                parseInt(itemQuantity);
+            updatedInventory[existingItemIndex].enteredQuantity -=
+                parseInt(itemQuantity);
             setInventory(updatedInventory);
         }
 
@@ -126,36 +136,52 @@ const Home = (props: Props) => {
     };
 
     const handleClearItems = () => {
-        deleteItem()
+        deleteItem();
         setInventory([]);
     };
-    console.log(inventory.map(item => item.name))
-    const data = inventory.map((item) => ({ id: item.name, title: item.name }))
+
+    const itemsData = async () => {
+        await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>({
+            query: queries.listInventoryItems,  
+        });
+    };
+
+    const handleSelectItem = (item: string) => {
+        setItemName(item);
+    };
+
+    console.log(itemsData);
+
+    const data = inventory.map(item => item.name);
+    const filteredData = data.filter(item => item.includes(itemName));
+
+    console.log(data);
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Inventory App</Text>
-            {/* <TextInput
-                placeholder="Enter the Item Name..."
-                style={styles.input}
+
+            {/* <View style={styles.inputContainer}> */}
+            <AutocompleteInput
+                containerStyle={styles.autocompleteContainer}
+                inputContainerStyle={styles.input}
+                data={filteredData}
                 value={itemName}
                 onChangeText={text => setItemName(text)}
-            /> */}
-            <AutocompleteDropdown
-                dataSet={data}
-                // style={styles.input}
-                // value={itemName}
-                textInputProps={
-                    {
-                        placeholder: 'Enter the Item Name'
-                    }
-                }
-                onChangeText={text => setItemName(text)}
+                placeholder="Enter the Item Name..."
+                listContainerStyle={styles.list}
+                flatListProps={{
+                    renderItem: ({ item }) => (
+                        <TouchableOpacity onPress={() => handleSelectItem(item)}>
+                            <Text>{item}</Text>
+                        </TouchableOpacity>
+                    ),
+                }}
             />
-
+            {/* </View> */}
             <TextInput
                 placeholder="Enter the Quantity of Item..."
-                keyboardType="numeric"
                 style={styles.input}
+                keyboardType="numeric"
                 value={itemQuantity}
                 onChangeText={text => setItemQuantity(text)}
             />
@@ -188,9 +214,8 @@ const Home = (props: Props) => {
                 />
             </View>
         </View>
-    )
+    );
 };
-
 
 const styles = StyleSheet.create({
     container: {
@@ -206,6 +231,12 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 1,
         marginBottom: 10,
+        padding: 5,
+    },
+    inputText: {
+        borderColor: '#000',
+        borderWidth: 1,
+        // marginBottom: 10,
         padding: 5,
     },
     buttonContainer: {
@@ -230,6 +261,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    list: {
+        padding: 10,
+    },  
+    inputContainer: {
+        flex: 1,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 1,
+    },
+    autocompleteContainer: {
+        marginBottom : 0
+    }
 });
 
 export default Home;
