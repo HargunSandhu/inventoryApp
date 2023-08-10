@@ -8,11 +8,8 @@ import {
     FlatList,
     TouchableOpacity,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 
 import AutocompleteInput from 'react-native-autocomplete-input';
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-// import { InputAutoSuggest } from 'react-native-autocomplete-search';
 
 import * as queries from '../graphql/queries';
 import * as mutations from '../graphql/mutations';
@@ -25,7 +22,7 @@ import {
     UpdateInventoryItemsMutation,
     CreateInventoryItemsInput,
 } from '../API';
-import { API, Auth } from 'aws-amplify';
+import { API, Auth, DataStore } from 'aws-amplify';
 import { graphqlOperation, type GraphQLQuery } from '@aws-amplify/api';
 import SignUp from './SignUp';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -40,7 +37,7 @@ interface InventoryItem {
 
 interface Props extends NativeStackScreenProps<HomeParamList, 'Home'> { }
 
-const Home = (props: Props) => {
+const Home =  (props: Props) => {
     const { navigation } = props;
     const [inventory, setInventory] = useState<Array<any>>([]);
     const [itemName, setItemName] = useState('');
@@ -116,8 +113,10 @@ const Home = (props: Props) => {
             setItemName('');
             setItemQuantity('');
         }
-    };
+        };
 
+    
+    
     const handleRemoveItem = () => {
         const existingItemIndex = inventory.findIndex(
             item => item.name === itemName,
@@ -140,17 +139,14 @@ const Home = (props: Props) => {
         setInventory([]);
     };
 
-    const itemsData = async () => {
-        await API.graphql<GraphQLQuery<ListInventoryItemsQuery>>({
-            query: queries.listInventoryItems,  
-        });
-    };
+    
 
     const handleSelectItem = (item: string) => {
         setItemName(item);
     };
 
-    console.log(itemsData);
+
+    
 
     const data = inventory.map(item => item.name);
     const filteredData = data.filter(item => item.includes(itemName));
@@ -160,9 +156,9 @@ const Home = (props: Props) => {
         <View style={styles.container}>
             <Text style={styles.heading}>Inventory App</Text>
 
-            {/* <View style={styles.inputContainer}> */}
+            <View style={styles.itemContainer}>
             <AutocompleteInput
-                containerStyle={styles.autocompleteContainer}
+                
                 inputContainerStyle={styles.input}
                 data={filteredData}
                 value={itemName}
@@ -177,7 +173,8 @@ const Home = (props: Props) => {
                     ),
                 }}
             />
-            {/* </View> */}
+            </View>
+            <View style={styles.c2}>
             <TextInput
                 placeholder="Enter the Quantity of Item..."
                 style={styles.input}
@@ -212,11 +209,11 @@ const Home = (props: Props) => {
                         </View>
                     )}
                 />
+                </View>
             </View>
         </View>
     );
 };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -231,13 +228,8 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 1,
         marginBottom: 10,
-        padding: 5,
-    },
-    inputText: {
-        borderColor: '#000',
-        borderWidth: 1,
-        // marginBottom: 10,
-        padding: 5,
+        padding: 10,
+        borderRadius: 5,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -246,35 +238,31 @@ const styles = StyleSheet.create({
     },
     button: {
         flex: 1,
-        marginRight: 10,
+        marginHorizontal: 5,
     },
     listContainer: {
         flex: 1,
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
     },
     stock: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
     },
-    list: {
-        padding: 10,
-    },  
-    inputContainer: {
-        flex: 1,
-        left: 0,
+    itemContainer: {
         position: 'absolute',
-        right: 0,
-        top: 0,
+        left: 20,
+        right: 20,
         zIndex: 1,
+        top: 80, 
     },
-    autocompleteContainer: {
-        marginBottom : 0
+    list: {
+        position: 'relative',
+    },
+    c2: {
+        position: "relative",
+        top: 70, 
     }
 });
+
 
 export default Home;

@@ -74,3 +74,6 @@ export const syncInventoryItems = /* GraphQL */ `
     }
   }
 `;
+export const logsInventoryItems = /* GraphQL */`
+  query LogsInventoryItems()
+`
