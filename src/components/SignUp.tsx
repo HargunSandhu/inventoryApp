@@ -34,6 +34,9 @@ const SignUp = ({route, navigation}: SignUpProps) => {
       const {user} = await Auth.signUp({
         username: signUpParams.email,
         password: signUpParams.password,
+        autoSignIn: {
+          enabled: true,
+        },
       });
       console.log('Sign up successful', user);
       user && navigation.navigate('EmailConfirm', {email: signUpParams.email});
@@ -45,6 +48,9 @@ const SignUp = ({route, navigation}: SignUpProps) => {
 
   return (
     <SafeAreaView>
+      <View>
+        <Text style={styles.head}>Sign Up:</Text>
+      </View>
       <TextInput
         placeholder="Email"
         value={signUpParams.email}
@@ -98,7 +104,11 @@ const styles = StyleSheet.create({
     color: '#000',
     marginRight: 10,
   },
-  txt: {},
+  head: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+},
 });
 
 export default SignUp;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Button, TextInput, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Button, TextInput, StyleSheet, View, Text } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeParamList } from '../navigation/home-stack';
@@ -25,7 +25,7 @@ const EmailConfirm = (props: Props) => {
                 confirmParams.email,
                 confirmParams.code,
             );
-            user && navigation.navigate('Home');
+            user && navigation.navigate('SignIn');
         } catch (error) {
             console.log('error confirming sign up', error);
         }
@@ -37,6 +37,9 @@ const EmailConfirm = (props: Props) => {
 
     return (
         <SafeAreaView>
+            <View>
+                <Text style={styles.head}>Verify Email:</Text>
+            </View>
             <TextInput
                 placeholder="Enter the Code..."
                 style={styles.input}
@@ -63,6 +66,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginTop: 10,
     },
+    head: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    }
 });
 
 export default EmailConfirm;

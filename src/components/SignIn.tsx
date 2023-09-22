@@ -1,6 +1,6 @@
 import React, {useReducer, type Reducer} from 'react';
 import {Auth} from 'aws-amplify';
-import {View, TextInput, Button, StyleSheet} from 'react-native';
+import {View, TextInput, Button, StyleSheet, Text} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {HomeParamList} from '../navigation/home-stack';
 
@@ -34,6 +34,9 @@ const SignIn = (props: SignInProps) => {
 
   return (
     <View>
+      <View>
+        <Text style={styles.head}>Sign In:</Text>
+      </View>
       <TextInput
         placeholder="Email"
         value={loginParams.email}
@@ -75,6 +78,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
+  head: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  }
 
 })
 
